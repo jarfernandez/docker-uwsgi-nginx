@@ -12,7 +12,9 @@ services:
     restart: unless-stopped
  
   uwsgi-1:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile-multi-stage
     image: aprenderdevops/uwsgi:latest
     container_name: uwsgi-1
     hostname: uwsgi-1
