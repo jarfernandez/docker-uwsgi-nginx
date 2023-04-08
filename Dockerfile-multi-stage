@@ -1,8 +1,8 @@
 # Version de Python (solo mayor y menor)
-ARG PYTHON_VERSION=3.11
+ARG _PYTHON_VERSION=3.11
 
 # Etapa build
-FROM python:${PYTHON_VERSION} AS build
+FROM python:${_PYTHON_VERSION} AS build
 LABEL maintainer="Jose Arturo Fernandez <jarfernandez@aprenderdevops.com>"
 
 # Se instala uWSGI y todas las librerias que necesita la aplicacion
@@ -10,10 +10,10 @@ COPY WebApp/requirements.txt requirements.txt
 RUN pip install uwsgi && pip install -r requirements.txt
  
 # Etapa run
-FROM python:${PYTHON_VERSION}-slim AS run
+FROM python:${_PYTHON_VERSION}-slim AS run
 
 # Es necesario volver a incluir en esta etapa esta variable
-ARG PYTHON_VERSION
+ARG _PYTHON_VERSION
 
 # Puerto HTTP por defecto para uWSGI
 ARG UWSGI_HTTP_PORT=8000
@@ -31,7 +31,7 @@ RUN useradd -ms /bin/bash admin
 USER admin
 
 # Se copia el contenido de la imagen builder
-COPY --from=build /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/local/lib/python${PYTHON_VERSION}/site-packages
+COPY --from=build /usr/local/lib/python${_PYTHON_VERSION}/site-packages /usr/local/lib/python${_PYTHON_VERSION}/site-packages
 COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
 
 # Se copia el contenido de la aplicacion
